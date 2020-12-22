@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "647114449248",
+    "project_id": "farma-fast-8687f",
+    "storage_bucket": "farma-fast-8687f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647114449248:android:6fbdd7256d1f4e4de2be05",
+        "android_client_info": {
+          "package_name": "com.example.farmafast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647114449248-hj08k0vpquaj4tf4t16jbso4hb8ej9d8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB51d699jC7kOoEG69ku_edfQE994s3kvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647114449248-hj08k0vpquaj4tf4t16jbso4hb8ej9d8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
