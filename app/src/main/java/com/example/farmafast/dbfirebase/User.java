@@ -3,8 +3,6 @@ package com.example.farmafast.dbfirebase;
 public class User {
 
     private String Uid;
-    private String Correo;
-    private String Contrasenia;
     private String Tipo_usuario;
 
     public User() {
@@ -18,22 +16,6 @@ public class User {
         Uid = uid;
     }
 
-    public String getCorreo() {
-        return Correo;
-    }
-
-    public void setCorreo(String correo) {
-        Correo = correo;
-    }
-
-    public String getContrasenia() {
-        return Contrasenia;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        Contrasenia = contrasenia;
-    }
-
     public String getTipo_usuario() {
         return Tipo_usuario;
     }
@@ -43,6 +25,6 @@ public class User {
     }
 
     public String toString() {
-        return Uid + " " + Correo + " " + Tipo_usuario;
+        return Uid + " - " + Tipo_usuario;
     }
 }

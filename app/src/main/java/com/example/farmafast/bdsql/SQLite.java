@@ -27,12 +27,11 @@ public class SQLite {
         sql.close();
     }
 
-    public boolean addRegistroSesion(int id, String idfirebase, String tipousuario, String correo){
+    public boolean addRegistroSesion(int id, String idfirebase, String tipousuario){
         ContentValues cv = new ContentValues();
         cv.put("ID", id);
         cv.put("IDFIREBASE", idfirebase);
         cv.put("TIPOUSUARIO", tipousuario);
-        cv.put("CORREO", correo);
         return (db.insert("SESION", null, cv) != -1 ? true : false);
     }
 
@@ -48,7 +47,6 @@ public class SQLite {
                 item += "ID: [" + cursor.getString(0) + "]\r\n";
                 item += "IDFIREBASE: [" + cursor.getString(1) + "]\r\n";
                 item += "TIPOUSUARIO: [" + cursor.getString(2) + "]\r\n";
-                item += "CORREO: [" + cursor.getString(3) + "]\r\n";
                 ListData.add(item);
                 item = "";
             }while (cursor.moveToNext());
@@ -56,12 +54,11 @@ public class SQLite {
         return ListData;
     }
 
-    public String updateRegistroSesion(int id, String idfirebase, String tipousuario, String correo){
+    public String updateRegistroSesion(int id, String idfirebase, String tipousuario){
         ContentValues cv = new ContentValues();
         cv.put("ID", id);
         cv.put("IDFIREBASE", idfirebase);
         cv.put("TIPOUSUARIO", tipousuario);
-        cv.put("CORREO", correo);
         int  valor = db.update("SESION", cv, "ID = " + id, null);
         if (valor == 1){
             return "SESION modificada";
@@ -110,19 +107,6 @@ public class SQLite {
         if (cursor.moveToFirst()){
             do {
                 item += "TIPOUSUARIO: [" + cursor.getString(2) + "]\r\n";
-                ListData.add(item);
-                item = "";
-            }while (cursor.moveToNext());
-        }
-        return ListData;
-    }
-
-    public ArrayList<String> getCORREO(Cursor cursor){
-        ArrayList<String> ListData = new ArrayList<>();
-        String item = "";
-        if (cursor.moveToFirst()){
-            do {
-                item += "CORREO: [" + cursor.getString(3) + "]\r\n";
                 ListData.add(item);
                 item = "";
             }while (cursor.moveToNext());

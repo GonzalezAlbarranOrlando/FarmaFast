@@ -5,7 +5,10 @@ public class Usuario {
     private String Nombre;
     private String ApellidoPaterno;
     private String ApellidoMaterno;
-    private String Coordenadas;
+    private String Longitud;
+    private String Latitud;
+    private String Correo;
+    private String Contrasenia;
 
     public Usuario() {
     }
@@ -42,12 +45,36 @@ public class Usuario {
         ApellidoMaterno = apellidoMaterno;
     }
 
-    public String getCoordenadas() {
-        return Coordenadas;
+    public String getLongitud() {
+        return Longitud;
     }
 
-    public void setCoordenadas(String coordenadas) {
-        Coordenadas = coordenadas;
+    public void setLongitud(String longitud) {
+        Longitud = longitud;
+    }
+
+    public String getLatitud() {
+        return Latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        Latitud = latitud;
+    }
+
+    public String getCorreo() {
+        return Correo;
+    }
+
+    public void setCorreo(String correo) {
+        Correo = correo;
+    }
+
+    public String getContrasenia() {
+        return Contrasenia;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        Contrasenia = contrasenia;
     }
 
     public String toString() {

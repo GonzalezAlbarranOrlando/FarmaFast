@@ -23,6 +23,9 @@
     <string name="registrarse_como_repartidor">Registrarse como repartidor</string>
     <string name="registrarse_como_establecimiento">Registrarse como establecimiento</string>
 
-    <string name="coordenadas">Coordenadas</string>
+    <string name="coordenadas_del_domicilio">Coordenadas del domicilio</string>
+    <string name="coordenadas_del_establecimiento">Coordenadas del establecimiento</string>
+    <string name="longitud">Longitud</string>
+    <string name="latitud">Latitud</string>
     <string name="todo">todo</string>
 </resources>

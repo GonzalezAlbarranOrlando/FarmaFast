@@ -12,12 +12,11 @@ public class sql extends SQLiteOpenHelper {
     private static final String tableSesion = "CREATE TABLE SESION(" +
             "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             "IDFIREBASE TEXT NOT NULL, " +
-            "TIPOUSUARIO TEXT NOT NULL, " +
-            "CORREO TEXT NOT NULL" +
+            "TIPOUSUARIO TEXT NOT NULL " +
             ");";
 
-    private static final String insertSesion = "INSERT INTO SESION (ID,  IDFIREBASE, TIPOUSUARIO, CORREO) " +
-            "VALUES (1, '0', '0', '0');";
+    private static final String insertSesion = "INSERT INTO SESION (ID,  IDFIREBASE, TIPOUSUARIO) " +
+            "VALUES (1, '0', '0');";
 
     public sql(Context context){
         super(context, database, null, VERSION);
