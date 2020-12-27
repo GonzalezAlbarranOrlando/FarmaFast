@@ -1,13 +1,14 @@
 package com.example.farmafast.dbfirebase;
 
-public class Usuario {
+public class Repartidor {
     private String Uid;
     private String Nombre;
     private String ApellidoPaterno;
     private String ApellidoMaterno;
-    private String Coordenadas;
+    private String Correo;
+    private String Contrasenia;
 
-    public Usuario() {
+    public Repartidor() {
     }
 
     public String getUid() {
@@ -42,12 +43,20 @@ public class Usuario {
         ApellidoMaterno = apellidoMaterno;
     }
 
-    public String getCoordenadas() {
-        return Coordenadas;
+    public String getCorreo() {
+        return Correo;
     }
 
-    public void setCoordenadas(String coordenadas) {
-        Coordenadas = coordenadas;
+    public void setCorreo(String correo) {
+        Correo = correo;
+    }
+
+    public String getContrasenia() {
+        return Contrasenia;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        Contrasenia = contrasenia;
     }
 
     public String toString() {

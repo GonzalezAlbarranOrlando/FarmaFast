@@ -1,13 +1,13 @@
 package com.example.farmafast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.farmafast.bdsql.SQLite;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,8 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String correo, contrasenia;
 
     private FirebaseAuth mAuth;
-    private ProgressDialog progressDialog;
+
     private SharedPreferences preferences;
+    AlertDialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +66,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvRestablecerContrasenia.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
         preferences = getSharedPreferences("Preferences", MODE_PRIVATE);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false); // if you want user to wait for some process to finish,
+        builder.setView(R.layout.layout_loading_dialog);
+        dialog = builder.create();
     }
 
     @Override
@@ -72,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.bIngresarMain: {
                 if(validacion()){
-                    progressDialog.setMessage("Procesando...");
-                    progressDialog.show();
+                    dialog.setMessage("Procesando...");
+                    dialog.show();
                     mAuth.signInWithEmailAndPassword(correo, contrasenia)
                             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -90,12 +97,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                              */
                                         }else{
                                             //correo sin verificar
-                                            progressDialog.dismiss();
+                                            dialog.dismiss();
                                             Toast.makeText(MainActivity.this,"Correo sin verificar",Toast.LENGTH_SHORT).show();
                                         }
                                     }else{
                                         //correo o contraseña incorrectos, etc.
-                                        progressDialog.dismiss();
+                                        dialog.dismiss();
                                         Toast.makeText(MainActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -126,16 +133,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     etCorreo.setError("Obligatorio");
                     return;
                 }
-                progressDialog.setMessage("Procesando...");
-                progressDialog.show();
+                dialog.setMessage("Procesando...");
+                dialog.show();
                 mAuth.sendPasswordResetEmail(correo).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            progressDialog.dismiss();
+                            dialog.dismiss();
                             Toast.makeText(MainActivity.this, "Se te ha enviado un correo para reestablecer la contraseña", Toast.LENGTH_LONG).show();
                         } else {
-                            progressDialog.dismiss();
+                            dialog.dismiss();
                             Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
@@ -163,25 +170,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void validaSesion() {
-        String preferences_correo = preferences.getString("correo", null);
-        if (preferences_correo != null) {
-            String preferences_tipousu = preferences.getString("tipo_usuario", null);
-            switch (preferences_tipousu) {
+        SQLite sqLite = new SQLite(this);
+        sqLite.abrir();
+        Cursor cursor = sqLite.getValor(1);
+        if (cursor.getCount() == 0){
+            return;
+        }
+        cursor.moveToFirst();
+        String str_tipousuario = cursor.getString(2);
+        sqLite.cerrar();
+        Toast.makeText(MainActivity.this, "Tipo usuario: "+str_tipousuario, Toast.LENGTH_LONG).show();
+            switch (str_tipousuario) {
+                case"0":
+                    //no hay sesion registrada
+                    break;
                 case "1":
-                    //Intent intent = new Intent(getApplication(), CrudActivity.class);
+                    //Intent intent = new Intent(getApplication(), );
                     //startActivity(intent);
                     break;
                 case "2":
+                    //Intent intent = new Intent(getApplication(), );
+                    //startActivity(intent);
                     break;
                 case "3":
+                    //Intent intent = new Intent(getApplication(), );
+                    //startActivity(intent);
                     break;
             }
-        }
     }
 
-    private void asignarPreferencias(String str_cor) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("correo", str_cor);
-        editor.commit();
-    }
 }

@@ -17,5 +17,5 @@ public class RegistroActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         tipo_usuario = b.getString("tipo_usuario");
     }
-    
+
 }
