@@ -8,6 +8,9 @@
     <string name="registrate">Registrate</string>
     <string name="restablecer_contrasenia">Restablecer contraseña</string>
 
+    <string name="registro_de_usuario">Registro de usuario</string>
+    <string name="registro_de_repartidor">Registro de repartidor</string>
+    <string name="registro_de_establecimiento">Registro de establecimiento</string>
     <string name="registro">Registro</string>
     <string name="nombre">Nombre</string>
     <string name="apellido_paterno">Apellido paterno</string>
@@ -19,4 +22,7 @@
     <string name="registrarse_como_usuario">Registrarse como usuario</string>
     <string name="registrarse_como_repartidor">Registrarse como repartidor</string>
     <string name="registrarse_como_establecimiento">Registrarse como establecimiento</string>
+
+    <string name="coordenadas">Coordenadas</string>
+    <string name="todo">todo</string>
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegistroEstablecimientoActivity">
+    tools:context=".RegistroRepartidorActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/registro_de_establecimiento"
+            android:text="@string/registro_de_repartidor"
             android:textSize="30sp"
             android:layout_gravity="center"/>
 
@@ -25,44 +25,40 @@
             android:layout_height="wrap_content"
             android:hint="@string/nombre">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietNombreEstablecimiento"
+                android:id="@+id/tietNombreRepartidor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/apellido_paterno">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietApellidoPaternoRepartidor"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/coordenadas">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tietCoordenadasEstablecimiento"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"/>
-            </com.google.android.material.textfield.TextInputLayout>
-            <ImageButton
-                android:id="@+id/ibCoordenadasEstablecimiento"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_baseline_my_location"
-                android:contentDescription="@string/todo"/>
-        </LinearLayout>
+                android:inputType="textCapWords"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/apellido_materno">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietApellidoMaternoRepartidor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/correo">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietCorreoEstablecimiento"
+                android:id="@+id/tietCorreoRepartidor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"/>
@@ -74,7 +70,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/contrasenia">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietContraseniaEstablecimiento"
+                android:id="@+id/tietContraseniaRepartidor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
@@ -85,7 +81,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/confirmar_contrasenia">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tietConfirmarContraseniaEstablecimiento"
+                android:id="@+id/tietConfirmarContraseniaRepartidor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
@@ -93,7 +89,7 @@
 
 
         <Button
-            android:id="@+id/bCrearCuentaEstablecimiento"
+            android:id="@+id/bCrearCuentaRepartidor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/crear_cuenta" />
@@ -111,7 +107,7 @@
                 android:text="@string/ya_tienes_cuenta"
                 android:layout_marginRight="5dp"/>
             <TextView
-                android:id="@+id/tvIngresarEstablecimiento"
+                android:id="@+id/tvIngresarRepartidor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"

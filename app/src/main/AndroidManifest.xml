@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegistroEstablecimientoActivity"></activity>
-        <activity android:name=".RegistroActivity" />
+        <activity android:name=".RegistroRepartidorActivity"></activity>
+        <activity android:name=".RegistroEstablecimientoActivity" />
+        <activity android:name=".RegistroUsuarioActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

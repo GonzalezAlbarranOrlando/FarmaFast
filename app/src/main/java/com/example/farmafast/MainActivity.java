@@ -3,13 +3,11 @@ package com.example.farmafast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,10 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -111,14 +105,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.bRegistroUsuarioMain: {
-                Intent intent = new Intent(this, RegistroActivity.class);
-                intent.putExtra("tipo_usuario", "1");
+                Intent intent = new Intent(this, RegistroUsuarioActivity.class);
                 startActivity(intent);
                 break;
             }
             case R.id.bRegistroRepartidorMain: {
-                Intent intent = new Intent(this, RegistroActivity.class);
-                intent.putExtra("tipo_usuario", "2");
+                Intent intent = new Intent(this, RegistroRepartidorActivity.class);
                 startActivity(intent);
                 break;
             }
@@ -179,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cursor.moveToFirst();
         String str_tipousuario = cursor.getString(2);
         sqLite.cerrar();
-        Toast.makeText(MainActivity.this, "Tipo usuario: "+str_tipousuario, Toast.LENGTH_LONG).show();
             switch (str_tipousuario) {
                 case"0":
                     //no hay sesion registrada
