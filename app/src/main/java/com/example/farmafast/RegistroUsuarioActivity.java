@@ -54,13 +54,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro_usuario);
         Componentes();
-
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    1);
-        }
+        VerificarPermiso();
     }
 
     private void Componentes() {
@@ -89,6 +83,12 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
         FirebaseApp.initializeApp(this);
         firebaseDataBase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDataBase.getReference();
+    }
+
+    private void VerificarPermiso(){
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck == PackageManager.PERMISSION_DENIED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
     }
 
     @Override
@@ -184,7 +184,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
                 break;
             }
             case R.id.ibCoordenadasUsuario: {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(this, "No se han definido los permisos necesarios", Toast.LENGTH_LONG).show();
                 } else {
                     // Acquire a reference to the system Location Manager
