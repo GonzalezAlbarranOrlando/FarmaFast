@@ -1,4 +1,4 @@
-package com.example.farmafast;
+package com.example.farmafast.registro;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -20,7 +20,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.farmafast.dbfirebase.Establecimiento;
+import com.example.farmafast.MainActivity;
+import com.example.farmafast.R;
+import com.example.farmafast.dbfirebase.Repartidor;
 import com.example.farmafast.dbfirebase.User;
 import com.example.farmafast.dbfirebase.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,14 +34,13 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegistroEstablecimientoActivity extends AppCompatActivity implements View.OnClickListener  {
+public class RegistroRepartidorActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText etNombre, etCorreo, etContrasenia, etConfirmarContrasenia, etLongitud, etLatittud;
+    private EditText etNombre, etApellidoPaterno, etApellidoMaterno, etCorreo, etContrasenia, etConfirmarContrasenia;
     private Button btnCrearCuenta;
-    private ImageButton btnCoordenadas;
     private TextView tvIngresar;
 
-    private String id, nombre, correo, contrasenia, confirmarContrasenia, longitud, latitud;
+    private String id, nombre, apellidoPaterno, apellidoMaterno, correo, contrasenia, confirmarContrasenia;
 
     private AlertDialog dialog;
 
@@ -50,26 +51,23 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro_establecimiento);
-
+        setContentView(R.layout.activity_registro_repartidor);
         Componentes();
         VerificarPermiso();
     }
 
     private void Componentes() {
         //EditText de interfaz
-        etNombre = findViewById(R.id.tietNombreEstablecimiento);
-        etCorreo = findViewById(R.id.tietCorreoEstablecimiento);
-        etContrasenia = findViewById(R.id.tietContraseniaEstablecimiento);
-        etConfirmarContrasenia = findViewById(R.id.tietConfirmarContraseniaEstablecimiento);
-        etLongitud = findViewById(R.id.tietLongitudEstablecimiento);
-        etLatittud = findViewById(R.id.tietLatitudEstablecimiento);
+        etNombre = findViewById(R.id.tietNombreRepartidor);
+        etApellidoPaterno = findViewById(R.id.tietApellidoPaternoRepartidor);
+        etApellidoMaterno = findViewById(R.id.tietApellidoMaternoRepartidor);
+        etCorreo = findViewById(R.id.tietCorreoRepartidor);
+        etContrasenia = findViewById(R.id.tietContraseniaRepartidor);
+        etConfirmarContrasenia = findViewById(R.id.tietConfirmarContraseniaRepartidor);
         //Button de interfaz
-        btnCrearCuenta = findViewById(R.id.bCrearCuentaEstablecimiento);
-        btnCoordenadas = findViewById(R.id.ibCoordenadasEstablecimiento);
-        tvIngresar = findViewById(R.id.tvIngresarEstablecimiento);
+        btnCrearCuenta = findViewById(R.id.bCrearCuentaRepartidor);
+        tvIngresar = findViewById(R.id.tvIngresarRepartidor);
         btnCrearCuenta.setOnClickListener(this);
-        btnCoordenadas.setOnClickListener(this);
         tvIngresar.setOnClickListener(this);
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -91,7 +89,7 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bCrearCuentaEstablecimiento: {
+            case R.id.bCrearCuentaRepartidor: {
                 if (validacion()) {//Validar que ningun campo este vacio
                     //Se muestra el dialogo mientras se realiza el proceso del registro
                     dialog.setMessage("Realizando registro");
@@ -108,30 +106,30 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    //Crear objeto para el usuario
+                                                    //Crear objeto para el repartidor
                                                     id = mAuth.getCurrentUser().getUid();
-                                                    Establecimiento usuario = new Establecimiento();
-                                                    usuario.setUid(id);
-                                                    usuario.setNombre(nombre);
-                                                    usuario.setCorreo(correo);
-                                                    usuario.setContrasenia(contrasenia);
-                                                    usuario.setLongitud(longitud);
-                                                    usuario.setLatitud(latitud);
-                                                    //Realizar insercion del establecimiento en base de datos
-                                                    databaseReference.child("establecimientos").child(usuario.getUid()).setValue(usuario)
+                                                    Repartidor repartidor = new Repartidor();
+                                                    repartidor.setUid(id);
+                                                    repartidor.setNombre(nombre);
+                                                    repartidor.setApellidoPaterno(apellidoPaterno);
+                                                    repartidor.setApellidoMaterno(apellidoMaterno);
+                                                    repartidor.setCorreo(correo);
+                                                    repartidor.setContrasenia(contrasenia);
+                                                    //Realizar insercion del repartidor en base de datos
+                                                    databaseReference.child("repartidores").child(repartidor.getUid()).setValue(repartidor)
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                     if (task.isSuccessful()) {
                                                                         /*
-                                                                        Realizar insercion del user en base de datos  (control de sesiones con el tipo de usuario)
+                                                                        Realizar insercion del user en base de datos  (control de sesiones con el tipo de repartidor)
                                                                         Tipo 1: Usuario
                                                                         Tipo 2: Repartidor
                                                                         Tipo 3: Establecimiento
                                                                          */
                                                                         User u = new User();
                                                                         u.setUid(id);
-                                                                        u.setTipo_usuario("3");
+                                                                        u.setTipo_usuario("2");
                                                                         databaseReference.child("users").child(u.getUid()).setValue(u)
                                                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                     @Override
@@ -149,7 +147,7 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
                                                                                     }
                                                                                 });
                                                                     } else {
-                                                                        //Error en la creacion del establecimiento
+                                                                        //Error en la creacion del repartidor
                                                                         dialog.dismiss();
                                                                         Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                                                     }
@@ -164,11 +162,11 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
                                         });
                                     } else {
                                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                            //El establecimiento autenticado ya existe
+                                            //El repartidor autenticado ya existe
                                             dialog.dismiss();
-                                            Toast.makeText(getApplicationContext(), "El establecimiento ya existe", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "El repartidor ya existe", Toast.LENGTH_LONG).show();
                                         } else {
-                                            //Error en la creacion del usuario autenticado mediante el correo y contraseña
+                                            //Error en la creacion del repartidor autenticado mediante el correo y contraseña
                                             dialog.dismiss();
                                             Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                         }
@@ -178,21 +176,7 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
                 }
                 break;
             }
-            case R.id.ibCoordenadasEstablecimiento: {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-                    Toast.makeText(this, "No se han definido los permisos necesarios", Toast.LENGTH_LONG).show();
-                } else {
-                    // Acquire a reference to the system Location Manager
-                    LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                    String locationProvider = LocationManager.NETWORK_PROVIDER;
-                    // Or use LocationManager.GPS_PROVIDER
-                    Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-                    etLongitud.setText(""+lastKnownLocation.getLongitude());
-                    etLatittud.setText(""+lastKnownLocation.getLatitude());
-                }
-                break;
-            }
-            case R.id.tvIngresarEstablecimiento: {
+            case R.id.tvIngresarRepartidor: {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;
@@ -203,15 +187,23 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
     private boolean validacion() {
         //leer los valores de los EditText
         nombre = etNombre.getText().toString().trim();
+        apellidoPaterno = etApellidoPaterno.getText().toString().trim();
+        apellidoMaterno = etApellidoMaterno.getText().toString().trim();
         correo = etCorreo.getText().toString().trim();
         contrasenia = etContrasenia.getText().toString();
         confirmarContrasenia = etConfirmarContrasenia.getText().toString();
-        longitud = etLongitud.getText().toString().trim();
-        latitud = etLatittud.getText().toString().trim();
         boolean b = true;
         //validar para cada uno que no este vacio
         if (nombre.equals("")) {
             etNombre.setError("Obligatorio");
+            b = false;
+        }
+        if (apellidoPaterno.equals("")) {
+            etApellidoPaterno.setError("Obligatorio");
+            b = false;
+        }
+        if (apellidoMaterno.equals("")) {
+            etApellidoMaterno.setError("Obligatorio");
             b = false;
         }
         if (correo.equals("")) {
@@ -224,14 +216,6 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
         }
         if (confirmarContrasenia.equals("")) {
             etConfirmarContrasenia.setError("Obligatorio");
-            b = false;
-        }
-        if (longitud.equals("")) {
-            etLongitud.setError("Obligatorio");
-            b = false;
-        }
-        if (latitud.equals("")) {
-            etLatittud.setError("Obligatorio");
             b = false;
         }
         //verificar que las contraseñas coincidan

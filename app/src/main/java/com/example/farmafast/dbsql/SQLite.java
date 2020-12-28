@@ -1,4 +1,4 @@
-package com.example.farmafast.bdsql;
+package com.example.farmafast.dbsql;
 
 import android.content.ContentValues;
 import android.content.Context;

@@ -14,9 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegistroRepartidorActivity"></activity>
-        <activity android:name=".RegistroEstablecimientoActivity" />
-        <activity android:name=".RegistroUsuarioActivity" />
+        <activity android:name=".registro.RegistroRepartidorActivity"></activity>
+        <activity android:name=".registro.RegistroEstablecimientoActivity" />
+        <activity android:name=".registro.RegistroUsuarioActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

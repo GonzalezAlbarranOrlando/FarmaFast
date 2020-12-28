@@ -1,4 +1,4 @@
-package com.example.farmafast;
+package com.example.farmafast.registro;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -7,12 +7,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +20,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.farmafast.MainActivity;
+import com.example.farmafast.R;
+import com.example.farmafast.dbfirebase.Establecimiento;
 import com.example.farmafast.dbfirebase.User;
 import com.example.farmafast.dbfirebase.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,18 +31,17 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegistroUsuarioActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegistroEstablecimientoActivity extends AppCompatActivity implements View.OnClickListener  {
 
-    private EditText etNombre, etApellidoPaterno, etApellidoMaterno, etCorreo, etContrasenia, etConfirmarContrasenia, etLongitud, etLatittud;
+    private EditText etNombre, etCorreo, etContrasenia, etConfirmarContrasenia, etLongitud, etLatittud;
     private Button btnCrearCuenta;
     private ImageButton btnCoordenadas;
     private TextView tvIngresar;
 
-    private String id, nombre, apellidoPaterno, apellidoMaterno, correo, contrasenia, confirmarContrasenia, longitud, latitud;
+    private String id, nombre, correo, contrasenia, confirmarContrasenia, longitud, latitud;
 
     private AlertDialog dialog;
 
@@ -52,25 +52,24 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro_usuario);
+        setContentView(R.layout.activity_registro_establecimiento);
+
         Componentes();
         VerificarPermiso();
     }
 
     private void Componentes() {
         //EditText de interfaz
-        etNombre = findViewById(R.id.tietNombreUsuario);
-        etApellidoPaterno = findViewById(R.id.tietApellidoPaternoUsuario);
-        etApellidoMaterno = findViewById(R.id.tietApellidoMaternoUsuario);
-        etCorreo = findViewById(R.id.tietCorreoUsuario);
-        etContrasenia = findViewById(R.id.tietContraseniaUsuario);
-        etConfirmarContrasenia = findViewById(R.id.tietConfirmarContraseniaUsuario);
-        etLongitud = findViewById(R.id.tietLongitudUsuario);
-        etLatittud = findViewById(R.id.tietLatitudUsuario);
+        etNombre = findViewById(R.id.tietNombreEstablecimiento);
+        etCorreo = findViewById(R.id.tietCorreoEstablecimiento);
+        etContrasenia = findViewById(R.id.tietContraseniaEstablecimiento);
+        etConfirmarContrasenia = findViewById(R.id.tietConfirmarContraseniaEstablecimiento);
+        etLongitud = findViewById(R.id.tietLongitudEstablecimiento);
+        etLatittud = findViewById(R.id.tietLatitudEstablecimiento);
         //Button de interfaz
-        btnCrearCuenta = findViewById(R.id.bCrearCuentaUsuario);
-        btnCoordenadas = findViewById(R.id.ibCoordenadasUsuario);
-        tvIngresar = findViewById(R.id.tvIngresarUsuario);
+        btnCrearCuenta = findViewById(R.id.bCrearCuentaEstablecimiento);
+        btnCoordenadas = findViewById(R.id.ibCoordenadasEstablecimiento);
+        tvIngresar = findViewById(R.id.tvIngresarEstablecimiento);
         btnCrearCuenta.setOnClickListener(this);
         btnCoordenadas.setOnClickListener(this);
         tvIngresar.setOnClickListener(this);
@@ -94,7 +93,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bCrearCuentaUsuario: {
+            case R.id.bCrearCuentaEstablecimiento: {
                 if (validacion()) {//Validar que ningun campo este vacio
                     //Se muestra el dialogo mientras se realiza el proceso del registro
                     dialog.setMessage("Realizando registro");
@@ -113,17 +112,15 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
                                                 if (task.isSuccessful()) {
                                                     //Crear objeto para el usuario
                                                     id = mAuth.getCurrentUser().getUid();
-                                                    Usuario usuario = new Usuario();
+                                                    Establecimiento usuario = new Establecimiento();
                                                     usuario.setUid(id);
                                                     usuario.setNombre(nombre);
-                                                    usuario.setApellidoPaterno(apellidoPaterno);
-                                                    usuario.setApellidoMaterno(apellidoMaterno);
                                                     usuario.setCorreo(correo);
                                                     usuario.setContrasenia(contrasenia);
                                                     usuario.setLongitud(longitud);
                                                     usuario.setLatitud(latitud);
-                                                    //Realizar insercion del usuario en base de datos
-                                                    databaseReference.child("usuarios").child(usuario.getUid()).setValue(usuario)
+                                                    //Realizar insercion del establecimiento en base de datos
+                                                    databaseReference.child("establecimientos").child(usuario.getUid()).setValue(usuario)
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
@@ -136,7 +133,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
                                                                          */
                                                                         User u = new User();
                                                                         u.setUid(id);
-                                                                        u.setTipo_usuario("1");
+                                                                        u.setTipo_usuario("3");
                                                                         databaseReference.child("users").child(u.getUid()).setValue(u)
                                                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                     @Override
@@ -154,7 +151,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
                                                                                     }
                                                                                 });
                                                                     } else {
-                                                                        //Error en la creacion del usuario
+                                                                        //Error en la creacion del establecimiento
                                                                         dialog.dismiss();
                                                                         Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                                                     }
@@ -169,9 +166,9 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
                                         });
                                     } else {
                                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                                            //El usuario autenticado ya existe
+                                            //El establecimiento autenticado ya existe
                                             dialog.dismiss();
-                                            Toast.makeText(getApplicationContext(), "El usuario ya existe", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "El establecimiento ya existe", Toast.LENGTH_LONG).show();
                                         } else {
                                             //Error en la creacion del usuario autenticado mediante el correo y contraseña
                                             dialog.dismiss();
@@ -183,7 +180,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
                 }
                 break;
             }
-            case R.id.ibCoordenadasUsuario: {
+            case R.id.ibCoordenadasEstablecimiento: {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(this, "No se han definido los permisos necesarios", Toast.LENGTH_LONG).show();
                 } else {
@@ -197,7 +194,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
                 }
                 break;
             }
-            case R.id.tvIngresarUsuario: {
+            case R.id.tvIngresarEstablecimiento: {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;
@@ -208,8 +205,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
     private boolean validacion() {
         //leer los valores de los EditText
         nombre = etNombre.getText().toString().trim();
-        apellidoPaterno = etApellidoPaterno.getText().toString().trim();
-        apellidoMaterno = etApellidoMaterno.getText().toString().trim();
         correo = etCorreo.getText().toString().trim();
         contrasenia = etContrasenia.getText().toString();
         confirmarContrasenia = etConfirmarContrasenia.getText().toString();
@@ -219,14 +214,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity implements View.O
         //validar para cada uno que no este vacio
         if (nombre.equals("")) {
             etNombre.setError("Obligatorio");
-            b = false;
-        }
-        if (apellidoPaterno.equals("")) {
-            etApellidoPaterno.setError("Obligatorio");
-            b = false;
-        }
-        if (apellidoMaterno.equals("")) {
-            etApellidoMaterno.setError("Obligatorio");
             b = false;
         }
         if (correo.equals("")) {

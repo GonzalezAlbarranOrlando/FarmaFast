@@ -9,14 +9,16 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.farmafast.bdsql.SQLite;
+import com.example.farmafast.dbsql.SQLite;
 import com.example.farmafast.dbfirebase.User;
+import com.example.farmafast.registro.RegistroEstablecimientoActivity;
+import com.example.farmafast.registro.RegistroRepartidorActivity;
+import com.example.farmafast.registro.RegistroUsuarioActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
