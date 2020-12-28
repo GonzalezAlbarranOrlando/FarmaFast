@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     //checking if success
-                                    Toast.makeText(MainActivity.this, "UID:" + mAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
                                     if (task.isSuccessful()) {
                                         if (mAuth.getCurrentUser().isEmailVerified()) {
                                             //Correo ya se encuentra verificado
@@ -120,20 +119,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                                     */
                                                     switch (user.getTipo_usuario()) {
                                                         case "1":
-                                                            asignarSesion(user.getUid(), user.getTipo_usuario());
-                                                            //Intent intent = new Intent(getApplication(), CrudActivity.class);
+                                                            Toast.makeText(getApplicationContext(), "Usuario:"+user.toString(), Toast.LENGTH_LONG).show();
+                                                            //asignarSesion(user.getUid(), user.getTipo_usuario());
+                                                            //Intent intent = new Intent(getApplication(), UsuarioActivity.class);
                                                             //startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
                                                         case "2":
-                                                            asignarSesion(user.getUid(), user.getTipo_usuario());
-                                                            //Intent intent = new Intent(getApplication(), CrudActivity.class);
+                                                            Toast.makeText(getApplicationContext(), "Repartidor:"+user.toString(), Toast.LENGTH_LONG).show();
+                                                            //asignarSesion(user.getUid(), user.getTipo_usuario());
+                                                            //Intent intent = new Intent(getApplication(), RepartidorActivity.class);
                                                             //startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
                                                         case "3":
-                                                            asignarSesion(user.getUid(), user.getTipo_usuario());
-                                                            //Intent intent = new Intent(getApplication(), CrudActivity.class);
+                                                            Toast.makeText(getApplicationContext(), "Establecimiento:"+user.toString(), Toast.LENGTH_LONG).show();
+                                                            //asignarSesion(user.getUid(), user.getTipo_usuario());
+                                                            //Intent intent = new Intent(getApplication(), EstablecimieentoActivity.class);
                                                             //startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
