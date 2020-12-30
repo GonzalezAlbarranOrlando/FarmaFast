@@ -118,27 +118,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                                     Tipo 3: Establecimiento
                                                     */
                                                     switch (user.getTipo_usuario()) {
-                                                        case "1":
-                                                            Toast.makeText(getApplicationContext(), "Usuario:"+user.toString(), Toast.LENGTH_LONG).show();
+                                                        case "1": {
+                                                            Toast.makeText(getApplicationContext(), "Usuario:" + user.toString(), Toast.LENGTH_LONG).show();
                                                             //asignarSesion(user.getUid(), user.getTipo_usuario());
-                                                            //Intent intent = new Intent(getApplication(), UsuarioActivity.class);
-                                                            //startActivity(intent);
+                                                            Intent intent = new Intent(getApplication(), UsuarioActivity.class);
+                                                            startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
-                                                        case "2":
-                                                            Toast.makeText(getApplicationContext(), "Repartidor:"+user.toString(), Toast.LENGTH_LONG).show();
+                                                        }
+                                                        case "2": {
+                                                            Toast.makeText(getApplicationContext(), "Repartidor:" + user.toString(), Toast.LENGTH_LONG).show();
                                                             //asignarSesion(user.getUid(), user.getTipo_usuario());
-                                                            //Intent intent = new Intent(getApplication(), RepartidorActivity.class);
-                                                            //startActivity(intent);
+                                                            Intent intent = new Intent(getApplication(), RepartidorActivity.class);
+                                                            startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
-                                                        case "3":
-                                                            Toast.makeText(getApplicationContext(), "Establecimiento:"+user.toString(), Toast.LENGTH_LONG).show();
+                                                        }
+                                                        case "3": {
+                                                            Toast.makeText(getApplicationContext(), "Establecimiento:" + user.toString(), Toast.LENGTH_LONG).show();
                                                             //asignarSesion(user.getUid(), user.getTipo_usuario());
                                                             //Intent intent = new Intent(getApplication(), EstablecimieentoActivity.class);
                                                             //startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
+                                                        }
                                                     }
                                                 }
 

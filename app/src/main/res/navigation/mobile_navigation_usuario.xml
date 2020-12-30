@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_usuario_inicio">
+
+    <fragment
+        android:id="@+id/nav_usuario_inicio"
+        android:name="com.example.farmafast.ui.usuario_inicio.UsuarioInicioFragment"
+        android:label="@string/menu_usuario_inicio"
+        tools:layout="@layout/fragment_usuario_inicio" />
+
+    <fragment
+        android:id="@+id/nav_creditos"
+        android:name="com.example.farmafast.ui.creditos.CreditosFragment"
+        android:label="@string/menu_creditos"
+        tools:layout="@layout/fragment_creditos" />
+
+</navigation>
