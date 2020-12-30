@@ -34,6 +34,7 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //Alan Burgos commit
     private EditText etCorreo, etContrasenia;
     private Button btnIngresar, btnRegistroUsuario, btnRegistroRepartidor, btnRegistroEstablecimiento;
     private TextView tvRestablecerContrasenia;
