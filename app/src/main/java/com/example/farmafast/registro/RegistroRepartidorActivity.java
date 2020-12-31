@@ -7,16 +7,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +20,6 @@ import com.example.farmafast.MainActivity;
 import com.example.farmafast.R;
 import com.example.farmafast.dbfirebase.Repartidor;
 import com.example.farmafast.dbfirebase.User;
-import com.example.farmafast.dbfirebase.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -72,7 +67,7 @@ public class RegistroRepartidorActivity extends AppCompatActivity implements Vie
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.layout_loading_dialog);
+        builder.setView(R.layout.loading_dialog);
         dialog = builder.create();
         //Inizializar Firebase
         FirebaseApp.initializeApp(this);

@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.layout_loading_dialog);
+        builder.setView(R.layout.loading_dialog);
         dialog = builder.create();
     }
 
@@ -137,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                                         case "3": {
                                                             Toast.makeText(getApplicationContext(), "Establecimiento:" + user.toString(), Toast.LENGTH_LONG).show();
                                                             //asignarSesion(user.getUid(), user.getTipo_usuario());
-                                                            //Intent intent = new Intent(getApplication(), EstablecimieentoActivity.class);
-                                                            //startActivity(intent);
+                                                            Intent intent = new Intent(getApplication(), EstablecimientoActivity.class);
+                                                            startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
                                                         }

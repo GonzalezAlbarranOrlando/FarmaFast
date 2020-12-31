@@ -24,7 +24,6 @@ import com.example.farmafast.MainActivity;
 import com.example.farmafast.R;
 import com.example.farmafast.dbfirebase.Establecimiento;
 import com.example.farmafast.dbfirebase.User;
-import com.example.farmafast.dbfirebase.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -76,7 +75,7 @@ public class RegistroEstablecimientoActivity extends AppCompatActivity implement
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.layout_loading_dialog);
+        builder.setView(R.layout.loading_dialog);
         dialog = builder.create();
         //Inizializar Firebase
         FirebaseApp.initializeApp(this);
