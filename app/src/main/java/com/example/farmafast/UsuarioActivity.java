@@ -1,13 +1,22 @@
 package com.example.farmafast;
 
+import android.content.ClipData;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 
+import com.example.farmafast.dbsql.SQLite;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,7 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class UsuarioActivity extends AppCompatActivity {
+public class UsuarioActivity extends AppCompatActivity{
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -60,4 +69,19 @@ public class UsuarioActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_cerrar_sesion_usuario) {
+            SQLite sqLite = new SQLite(this);
+            sqLite.abrir();
+            sqLite.updateRegistroSesion(1, "0", "0");
+            sqLite.cerrar();
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

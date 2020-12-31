@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.farmafast.dbfirebase.Establecimiento;
 import com.example.farmafast.dbsql.SQLite;
 import com.example.farmafast.dbfirebase.User;
 import com.example.farmafast.registro.RegistroEstablecimientoActivity;
@@ -120,24 +121,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                                     */
                                                     switch (user.getTipo_usuario()) {
                                                         case "1": {
-                                                            Toast.makeText(getApplicationContext(), "Usuario:" + user.toString(), Toast.LENGTH_LONG).show();
-                                                            //asignarSesion(user.getUid(), user.getTipo_usuario());
+                                                            asignarSesion(user.getUid(), user.getTipo_usuario());
                                                             Intent intent = new Intent(getApplication(), UsuarioActivity.class);
                                                             startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
                                                         }
                                                         case "2": {
-                                                            Toast.makeText(getApplicationContext(), "Repartidor:" + user.toString(), Toast.LENGTH_LONG).show();
-                                                            //asignarSesion(user.getUid(), user.getTipo_usuario());
+                                                            asignarSesion(user.getUid(), user.getTipo_usuario());
                                                             Intent intent = new Intent(getApplication(), RepartidorActivity.class);
                                                             startActivity(intent);
                                                             dialog.dismiss();
                                                             break;
                                                         }
                                                         case "3": {
-                                                            Toast.makeText(getApplicationContext(), "Establecimiento:" + user.toString(), Toast.LENGTH_LONG).show();
-                                                            //asignarSesion(user.getUid(), user.getTipo_usuario());
+                                                            asignarSesion(user.getUid(), user.getTipo_usuario());
                                                             Intent intent = new Intent(getApplication(), EstablecimientoActivity.class);
                                                             startActivity(intent);
                                                             dialog.dismiss();
@@ -246,18 +244,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case "0":
                 //no hay sesion registrada
                 break;
-            case "1":
-                //Intent intent = new Intent(getApplication(), );
-                //startActivity(intent);
+            case "1": {
+                Intent intent = new Intent(this, UsuarioActivity.class);
+                startActivity(intent);
                 break;
-            case "2":
-                //Intent intent = new Intent(getApplication(), );
-                //startActivity(intent);
+            }
+            case "2": {
+                Intent intent = new Intent(this, RepartidorActivity.class);
+                startActivity(intent);
                 break;
-            case "3":
-                //Intent intent = new Intent(getApplication(), );
-                //startActivity(intent);
+            }
+            case "3": {
+                Intent intent = new Intent(this, EstablecimientoActivity.class);
+                startActivity(intent);
                 break;
+            }
         }
     }
 

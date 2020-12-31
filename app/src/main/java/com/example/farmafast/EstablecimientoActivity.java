@@ -1,5 +1,6 @@
 package com.example.farmafast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -8,10 +9,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.example.farmafast.dbsql.SQLite;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -60,5 +64,19 @@ public class EstablecimientoActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_establecimiento);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_cerrar_sesion_establecimiento) {
+            SQLite sqLite = new SQLite(this);
+            sqLite.abrir();
+            sqLite.updateRegistroSesion(1, "0", "0");
+            sqLite.cerrar();
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
