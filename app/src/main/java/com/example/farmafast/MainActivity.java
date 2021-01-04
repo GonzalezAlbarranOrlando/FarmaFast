@@ -35,6 +35,10 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    static {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
+
     //Alan Burgos commit
     private EditText etCorreo, etContrasenia;
     private Button btnIngresar, btnRegistroUsuario, btnRegistroRepartidor, btnRegistroEstablecimiento;
@@ -75,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRegistroRepartidor.setOnClickListener(this);
         btnRegistroEstablecimiento.setOnClickListener(this);
         tvRestablecerContrasenia.setOnClickListener(this);
-        //Firebase
-        mAuth = FirebaseAuth.getInstance();
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
@@ -85,11 +87,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void iniciarFirebase() {
+        //checking if there are any initialized firebase apps
+        //if (FirebaseApp.getApps(this).size() == 0)
+          //  FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         FirebaseApp.initializeApp(this);
         firebaseDataBase = FirebaseDatabase.getInstance();
-        //Persistencia de datos
-        firebaseDataBase.setPersistenceEnabled(true);
         databaseReference = firebaseDataBase.getReference();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
