@@ -59,4 +59,9 @@
         Version 1.0\n\n
     </string>
 
+    <string name="datos">Datos</string>
+    <string name="precio">Precio</string>
+    <string name="lista_de_productos">Lista de productos</string>
+
+
 </resources>

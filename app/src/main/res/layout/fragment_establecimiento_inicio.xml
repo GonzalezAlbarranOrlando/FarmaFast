@@ -1,13 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.establecimiento_inicio.EstablecimientoInicioFragment">
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="end">
+            <ImageButton
+                android:id="@+id/ibAdd_producto_establecimiento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_add_24" />
+            <ImageButton
+                android:id="@+id/ibSave_producto_establecimiento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_save_24" />
+            <ImageButton
+                android:id="@+id/ibDelete_producto_establecimiento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_delete_forever_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="@string/datos"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/iVFoto_producto_establecimiento"
+                android:layout_width="196dp"
+                android:layout_height="172dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_menu_gallery"
+                android:contentDescription="@string/todo"/>
+
+            <EditText
+                android:id="@+id/etNombre_producto_establecimiento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:hint="@string/nombre"
+                android:autofillHints=""
+                android:textSize="12sp"
+                android:inputType="textPersonName"/>
+
+            <EditText
+                android:id="@+id/etPrecio_producto_establecimiento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:hint="@string/precio"
+                android:autofillHints=""
+                android:textSize="12sp"
+                android:inputType="numberDecimal"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="@string/lista_de_productos"
+            android:gravity="center"/>
+
+        <ListView
+            android:id="@+id/lvLista_productos_establecimiento"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:smoothScrollbar="true"
+            android:background="#C3C3C3"/>
+
+    </LinearLayout>
+</ScrollView>

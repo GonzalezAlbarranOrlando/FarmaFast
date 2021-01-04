@@ -4,6 +4,7 @@ public class Producto {
     private String Id;
     private String Nombre;
     private String Precio;
+    private String Id_establecimiento;
     private String Imagen;
 
     public Producto(){
@@ -39,6 +40,14 @@ public class Producto {
 
     public void setImagen(String imagen) {
         Imagen = imagen;
+    }
+
+    public String getId_establecimiento() {
+        return Id_establecimiento;
+    }
+
+    public void setId_establecimiento(String id_establecimiento) {
+        Id_establecimiento = id_establecimiento;
     }
 
     public String toString(){
