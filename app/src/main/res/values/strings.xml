@@ -47,7 +47,8 @@
     <string name="menu_gallery">Gallery</string>
     <string name="title_activity_establecimiento">EstablecimientoActivity</string>
 
-    <string name="creditos">Instituto Tecnológico de Toluca\n\n
+    <string name="creditos">
+        Instituto Tecnológico de Toluca\n\n
         Ingeniería en sistemas computacionales\n\n
         Desarrollo movil\n\n
         -Brito Rivera Mauricio\n
