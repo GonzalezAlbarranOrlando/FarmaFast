@@ -1,6 +1,7 @@
 package com.example.farmafast.ui.usuario_inicio;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,9 +53,14 @@ public class UsuarioInicioFragment extends Fragment {
     DatabaseReference databaseReference;
     private StorageReference mStorageRef;
 
+    EditText etCantidad;
+    ImageButton ibMas;
+    ImageButton ibMenos;
+    int cantidad = 1;
+
     ImageView imageView;
     File localFile;
-    private androidx.appcompat.app.AlertDialog dialog;
+    private androidx.appcompat.app.AlertDialog loading_dialog;
     View dialogView;
 
     private UsuarioInicioViewModel usuarioInicioViewModel;
@@ -76,7 +84,7 @@ public class UsuarioInicioFragment extends Fragment {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
         builder.setCancelable(false); // if you want user to wait for some process to finish,
         builder.setView(R.layout.loading_dialog);
-        dialog = builder.create();
+        loading_dialog = builder.create();
         //
         lvListaProductos = root.findViewById(R.id.lvListaProductosUsuario);
         lvListaProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,12 +94,36 @@ public class UsuarioInicioFragment extends Fragment {
                 //Toast.makeText(getContext(), "ID:" + pacienteSelected.getUid(), Toast.LENGTH_LONG).show();
                 String str = "" +
                         productoSelected.getNombre() + "\n" +
-                        "Precio: " + productoSelected.getPrecio() + "$\n" +
-                        "Imagen: " + productoSelected.getImagen() + "" +
+                        "Precio: " + productoSelected.getPrecio() + " $MXN" +
                         "";
                 dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_producto, null);
                 TextView textView = dialogView.findViewById(R.id.tVInfoProductoDialog);
                 imageView = dialogView.findViewById(R.id.iVFotoDialog);
+
+                ibMas = dialogView.findViewById(R.id.ibMas_cantidad_Dialog);
+                ibMenos = dialogView.findViewById(R.id.ibMenos_cantidad_Dialog);
+                etCantidad = dialogView.findViewById(R.id.tietCantidad_producto_Dialog);
+                etCantidad.setEnabled(false);
+                cantidad = 1;
+                etCantidad.setText(""+cantidad);
+                ibMas.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cantidad++;
+                        etCantidad.setText(""+cantidad);
+                    }
+                });
+
+                ibMenos.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (cantidad==1){
+                            return;
+                        }
+                        cantidad--;
+                        etCantidad.setText(""+cantidad);
+                    }
+                });
                 textView.setText(str);
                 cargarImagenes(productoSelected.getImagen());
             }
@@ -132,8 +164,8 @@ public class UsuarioInicioFragment extends Fragment {
     }
 
     public void cargarImagenes(String imagen){
-        dialog.setMessage("Obteniendo datos...");
-        dialog.show();
+        loading_dialog.setMessage("Obteniendo datos...");
+        loading_dialog.show();
         localFile = null;
         try {
             localFile = File.createTempFile("images", "jpg");
@@ -146,14 +178,27 @@ public class UsuarioInicioFragment extends Fragment {
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         // Successfully downloaded data to local file
                         // ...
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                        dialog.setTitle("Producto");
-                        dialog.setView(dialogView);
-                        dialog.setPositiveButton("Aceptar",null);
-                        dialog.show();
+                        AlertDialog.Builder dialog_producto = new AlertDialog.Builder(getContext());
+                        dialog_producto.setTitle("Producto");
+                        dialog_producto.setView(dialogView);
+                        dialog_producto.setCancelable(false);
+                        dialog_producto.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                               //nada
+                            }
+                        });
+                        dialog_producto.setPositiveButton("Carrito", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //insertar en firebase el pedido
+
+                            }
+                        });
+                        dialog_producto.show();
                         imageView.setImageURI(Uri.fromFile(localFile));
                         localFile = null;
-                        UsuarioInicioFragment.this.dialog.dismiss();
+                        UsuarioInicioFragment.this.loading_dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -166,7 +211,7 @@ public class UsuarioInicioFragment extends Fragment {
                 dialog.setPositiveButton("Aceptar",null);
                 dialog.show();
                 Toast.makeText(getContext(),"Error al cargarla imagen",Toast.LENGTH_LONG).show();
-                UsuarioInicioFragment.this.dialog.dismiss();
+                UsuarioInicioFragment.this.loading_dialog.dismiss();
             }
         });
     }

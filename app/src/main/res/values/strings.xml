@@ -64,6 +64,7 @@
     <string name="lista_de_productos">Lista de productos</string>
     <string name="limpiar">Limpiar</string>
     <string name="nada"></string>
+    <string name="cantidad">Cantidad</string>
 
 
 </resources>
