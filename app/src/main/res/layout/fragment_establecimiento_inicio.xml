@@ -61,27 +61,27 @@
                 app:srcCompat="@drawable/ic_menu_gallery"
                 android:contentDescription="@string/todo"/>
 
-            <EditText
-                android:id="@+id/etNombre_producto_establecimiento"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:hint="@string/nombre"
-                android:autofillHints=""
-                android:textSize="12sp"
-                android:inputType="textPersonName"/>
+                android:hint="@string/nombre">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tietNombre_producto_establecimiento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/etPrecio_producto_establecimiento"
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:hint="@string/precio"
-                android:autofillHints=""
-                android:textSize="12sp"
-                android:inputType="numberDecimal"/>
-
-
+                android:hint="@string/precio">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tietPrecio_producto_establecimiento"                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <TextView

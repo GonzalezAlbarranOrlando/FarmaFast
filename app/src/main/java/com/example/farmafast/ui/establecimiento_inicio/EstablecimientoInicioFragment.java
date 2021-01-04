@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -71,6 +72,8 @@ public class EstablecimientoInicioFragment extends Fragment implements View.OnCl
 
     String str_nombre = "", str_precio = "";
 
+    File localFile = null;
+
     private Uri photoURI;
     public static String currentPhotoPath = "", img = "";
     public static final int REQUEST_TAKE_PHOTO = 1;
@@ -97,8 +100,8 @@ public class EstablecimientoInicioFragment extends Fragment implements View.OnCl
     }
 
     private void Componentes(View root) {
-        etNombre = root.findViewById(R.id.etNombre_producto_establecimiento);
-        etPrecio = root.findViewById(R.id.etPrecio_producto_establecimiento);
+        etNombre = root.findViewById(R.id.tietNombre_producto_establecimiento);
+        etPrecio = root.findViewById(R.id.tietPrecio_producto_establecimiento);
         lvProductos = root.findViewById(R.id.lvLista_productos_establecimiento);
         //
         bLimpiar = root.findViewById(R.id.bLimpiar_producto_establecimiento);
@@ -128,6 +131,7 @@ public class EstablecimientoInicioFragment extends Fragment implements View.OnCl
                 etNombre.setText(productoSelected.getNombre());
                 etPrecio.setText(productoSelected.getPrecio());
                 img = productoSelected.getImagen();
+                cargarImagen(productoSelected.getImagen());
             }
         });
     }
@@ -291,6 +295,41 @@ public class EstablecimientoInicioFragment extends Fragment implements View.OnCl
                         }
                     });
         }
+    }
+
+    public void cargarImagen(String imagen) {
+
+        dialog.setMessage("Obteniendo datos...");
+        dialog.show();
+
+        localFile = null;
+        try {
+            localFile = File.createTempFile("images", "jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mStorageRef.child(imagen).getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        // Successfully downloaded data to local file
+                        // ...
+                        if(localFile == null){
+                            return;
+                        }
+                        ivFoto.setImageURI(Uri.fromFile(localFile));
+                        localFile = null;
+                        dialog.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle failed download
+                // ...
+                Toast.makeText(getContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
     }
 
     private String obtenerIdEstablecimiento(){
