@@ -18,7 +18,7 @@
             android:text="@string/lista_de_productos"
             android:textSize="15sp"/>
         <ListView
-            android:id="@+id/lvListaPacientesListar"
+            android:id="@+id/lvListaProductosUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#C3C3C3C3">
