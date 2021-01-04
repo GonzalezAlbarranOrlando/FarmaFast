@@ -51,7 +51,7 @@ public class Producto {
     }
 
     public String toString(){
-        return "[" + getId() + "] " + getNombre();
+        return getNombre()+": "+getPrecio()+"$";
     }
 
 }
