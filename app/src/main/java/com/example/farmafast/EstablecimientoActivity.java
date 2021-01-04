@@ -19,6 +19,7 @@ import com.example.farmafast.dbsql.SQLite;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class EstablecimientoActivity extends AppCompatActivity {
 

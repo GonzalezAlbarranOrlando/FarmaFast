@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void iniciarFirebase() {
         FirebaseApp.initializeApp(this);
         firebaseDataBase = FirebaseDatabase.getInstance();
-        //firebaseDataBase.setPersistenceEnabled(true);
+        //Persistencia de datos
+        firebaseDataBase.setPersistenceEnabled(true);
         databaseReference = firebaseDataBase.getReference();
     }
 
