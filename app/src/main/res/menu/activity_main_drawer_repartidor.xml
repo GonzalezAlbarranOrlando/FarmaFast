@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_repartidor_inicio" />
         <item
+            android:id="@+id/nav_repartidor_pedido_actual"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_pedido_actual" />
+        <item
             android:id="@+id/nav_creditos"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_creditos" />

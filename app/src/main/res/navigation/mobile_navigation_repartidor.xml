@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_repartidor_inicio" />
 
     <fragment
+        android:id="@+id/nav_repartidor_pedido_actual"
+        android:name="com.example.farmafast.ui.repartidor_pedido_actual.RepartidorPedidoActualFragment"
+        android:label="@string/menu_pedido_actual"
+        tools:layout="@layout/fragment_repartidor_pedido_actual" />
+
+    <fragment
         android:id="@+id/nav_creditos"
         android:name="com.example.farmafast.ui.creditos.CreditosFragment"
         android:label="@string/menu_creditos"

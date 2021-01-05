@@ -44,6 +44,7 @@
     <string name="title_activity_repartidor">RepartidorActivity</string>
 
     <string name="menu_home">Home</string>
+    <string name="menu_pedido_actual">Pedido actual</string>
     <string name="menu_gallery">Gallery</string>
     <string name="title_activity_establecimiento">EstablecimientoActivity</string>
 
