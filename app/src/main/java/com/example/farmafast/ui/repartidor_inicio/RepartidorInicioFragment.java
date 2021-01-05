@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,9 +20,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.farmafast.R;
 import com.example.farmafast.dbfirebase.Pedido;
+import com.example.farmafast.dbsql.SQLite;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +51,8 @@ public class RepartidorInicioFragment extends Fragment {
     View dialogViewPedido;
 
     SharedPreferences preferences;
+
+    String id_repartidor_actual = "";
 
     private RepartidorInicioViewModel mViewModel;
 
@@ -95,8 +100,24 @@ public class RepartidorInicioFragment extends Fragment {
                 dialog_producto.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //validar si hay un pedido en proceso
+                        String idAux = preferences.getString("id_pedido", null);
+                        if (idAux!=null){
+                            Toast.makeText(getContext(), "No puedes aceptar más de un pedido a la vez", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         //insertar actualizar el estado del pedido
                         databaseReference.child("pedido").child(pedidoSelected.getId()).child("estado").setValue("3");
+                        databaseReference.child("pedido").child(pedidoSelected.getId()).child("id_repartidor").setValue(id_repartidor_actual);
+                        asignarPreferenciasPedido(
+                                pedidoSelected.getId(),
+                                pedidoSelected.getId_usuario(),
+                                pedidoSelected.getId_establecimiento(),
+                                id_repartidor_actual,
+                                pedidoSelected.getFecha(),
+                                pedidoSelected.getHora(),
+                                "3"
+                        );
                     }
                 });
                 dialog_producto.show();
@@ -104,6 +125,8 @@ public class RepartidorInicioFragment extends Fragment {
         });
         //shared preferences
         preferences = this.getActivity().getSharedPreferences("pedidoActivo",MODE_PRIVATE);
+        //
+        id_repartidor_actual = obtenerIdRepartidor();
         return root;
     }
 
@@ -145,15 +168,30 @@ public class RepartidorInicioFragment extends Fragment {
         });
     }
 
-    private void asignarPreferenciasPedido(String id_pedido, String id_usuario, String id_establecimiento, String fecha, String hora, String estado) {
+    private void asignarPreferenciasPedido(String id_pedido, String id_usuario, String id_establecimiento, String id_repartidor, String fecha, String hora, String estado) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("id_pedido",id_pedido);
         editor.putString("id_usuario",id_usuario);
         editor.putString("id_establecimiento",id_establecimiento);
+        editor.putString("id_repartidor",id_repartidor);
         editor.putString("fecha",fecha);
         editor.putString("hora",hora);
         editor.putString("estado",estado);
         editor.commit();
+    }
+
+    private String obtenerIdRepartidor() {
+        SQLite sqLite = new SQLite(getContext());
+        sqLite.abrir();
+        Cursor cursor = sqLite.getValor(1);
+        if (cursor.getCount() == 0) {
+            //No se encotró el registro en la base de datos SQL
+            return "";
+        }
+        cursor.moveToFirst();
+        String string_column1 = cursor.getString(1);
+        sqLite.cerrar();
+        return string_column1;
     }
 
 }
