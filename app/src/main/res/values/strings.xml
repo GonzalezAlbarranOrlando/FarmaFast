@@ -40,7 +40,7 @@
     <string name="menu_repartidor_inicio">Repartidor inicio</string>
     <string name="menu_establecimiento_inicio">Establecimiento inicio</string>
     <string name="menu_creditos">Creditos</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_usuario_carrito">Carrito</string>
     <string name="title_activity_repartidor">RepartidorActivity</string>
 
     <string name="menu_home">Home</string>

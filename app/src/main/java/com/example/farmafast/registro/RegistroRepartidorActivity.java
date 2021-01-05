@@ -67,7 +67,7 @@ public class RegistroRepartidorActivity extends AppCompatActivity implements Vie
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.loading_dialog);
+        builder.setView(R.layout.dialog_loading);
         dialog = builder.create();
         //Inizializar Firebase
         FirebaseApp.initializeApp(this);

@@ -96,7 +96,7 @@ public class UsuarioInicioFragment extends Fragment {
         //Inicializar AlertDialog
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.loading_dialog);
+        builder.setView(R.layout.dialog_loading);
         loading_dialog = builder.create();
         //
         lvListaProductos = root.findViewById(R.id.lvListaProductosUsuario);

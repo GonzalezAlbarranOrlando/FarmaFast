@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_usuario_inicio" />
 
     <fragment
+        android:id="@+id/nav_usuario_carrito"
+        android:name="com.example.farmafast.ui.usuario_carrito.UsuarioCarritoFragment"
+        android:label="@string/menu_usuario_carrito"
+        tools:layout="@layout/fragment_usuario_carrito" />
+
+    <fragment
         android:id="@+id/nav_creditos"
         android:name="com.example.farmafast.ui.creditos.CreditosFragment"
         android:label="@string/menu_creditos"

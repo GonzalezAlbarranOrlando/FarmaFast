@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.farmafast.dbfirebase.Establecimiento;
 import com.example.farmafast.dbsql.SQLite;
 import com.example.farmafast.dbfirebase.User;
 import com.example.farmafast.registro.RegistroEstablecimientoActivity;
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.loading_dialog);
+        builder.setView(R.layout.dialog_loading);
         dialog = builder.create();
     }
 

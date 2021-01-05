@@ -118,7 +118,7 @@ public class EstablecimientoInicioFragment extends Fragment implements View.OnCl
         //Inicializar AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false); // if you want user to wait for some process to finish,
-        builder.setView(R.layout.loading_dialog);
+        builder.setView(R.layout.dialog_loading);
         dialog = builder.create();
         //
         iniciarFirebase();
