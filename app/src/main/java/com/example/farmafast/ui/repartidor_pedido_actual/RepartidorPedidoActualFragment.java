@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.farmafast.R;
 import com.example.farmafast.dbfirebase.Pedido;
+import com.example.farmafast.dbfirebase.PedidoProducto;
+import com.example.farmafast.dbfirebase.Producto;
 import com.example.farmafast.dbsql.SQLite;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+import java.util.Stack;
+
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 public class RepartidorPedidoActualFragment extends Fragment implements View.OnClickListener {
@@ -44,6 +51,8 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
 
     String id_repartidor_actual;
 
+    Boolean blnRealizarConsultas = true;
+
     private RepartidorPedidoActualViewModel mViewModel;
 
     public static RepartidorPedidoActualFragment newInstance() {
@@ -57,6 +66,7 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
         //
         iniciarFirebase();
         componentes(root);
+        blnRealizarConsultas = true;
         validarPedidoActual();
         return root;
     }
@@ -120,6 +130,9 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot objSnapshot : snapshot.getChildren()) {
+                    if (!blnRealizarConsultas){
+                        return;
+                    }
                     Pedido p = objSnapshot.getValue(Pedido.class);
                     if (p != null) {
                         if (p.getId_repartidor().equals(id_repartidor_actual)){
@@ -140,17 +153,110 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
                     bIrEstablecimiento.setEnabled(false);
                     return;
                 }
-                loading_dialog.dismiss();
-                tvInfoPedidoActual.setText(str_info_completa_pedido);
+                realizarConsultaProductosPedido();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(getContext(), ""+error.getMessage(),Toast.LENGTH_SHORT).show();
                 loading_dialog.dismiss();
+                blnRealizarConsultas=false;
             }
         });
     }
+
+
+    Stack pilaIdProducto = new Stack();
+    Stack pilaCantidad = new Stack();
+
+    private void realizarConsultaProductosPedido() {
+        databaseReference.child("pedido_producto").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!blnRealizarConsultas){
+                    return;
+                }
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                    PedidoProducto pedidoProductoTemporal = objSnapshot.getValue(PedidoProducto.class);
+                    if (pedidoProductoTemporal != null) {
+                        if (pedidoProductoTemporal.getId() != null) {
+                            if (pedidoProductoTemporal.getId_pedido().equals(str_id_pedido)) {
+                                pilaIdProducto.push(pedidoProductoTemporal.getId_producto() + "");
+                                pilaCantidad.push(pedidoProductoTemporal.getCantidad_producto() + "");
+                            }
+                        }
+                    }
+                }
+                realizarConsultaProductos();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+                Toast.makeText(getContext(), "Failed to read value."+error.getMessage(), Toast.LENGTH_SHORT).show();
+                loading_dialog.dismiss();
+                blnRealizarConsultas=false;
+            }
+        });
+    }
+
+    String idProductoTemporal = "";
+    String cantidadTemporal = "";
+    double sumaTotal = 0;
+
+    private void realizarConsultaProductos() {
+        sumaTotal = 0;
+        idProductoTemporal = "";
+        cantidadTemporal = "";
+        final Object[] arrID = pilaIdProducto.toArray();
+        final Object[] arrCantidad = pilaCantidad.toArray();
+        databaseReference.child("producto").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                    if (!blnRealizarConsultas){
+                        return;
+                    }
+                    Producto productoTemporal = objSnapshot.getValue(Producto.class);
+                    if (productoTemporal != null) {
+                        if (productoTemporal.getId() != null) {
+                            for (int i = 0; i < arrID.length; i++) {
+                                if (productoTemporal.getId().equals(arrID[i])) {
+                                    str_info_completa_pedido +=
+                                            productoTemporal.getNombre() + "\n"+productoTemporal.getPrecio()+" $MXN c/u\n" + arrCantidad[i] + "pieza(s)\n\n";
+                                    sumaTotal+=Double.parseDouble(productoTemporal.getPrecio())*Double.parseDouble(arrCantidad[i]+"");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                if (str_estado_pedido.equals("3")){
+                    bIrDomicilio.setEnabled(false);
+                }else if (str_estado_pedido.equals("4")){
+                    bIrEstablecimiento.setEnabled(false);
+                }
+                DecimalFormat df2 = new DecimalFormat("#.##");
+                str_info_completa_pedido += "Total a pagar: "+df2.format(sumaTotal)+" $MXN";
+                tvInfoPedidoActual.setText(str_info_completa_pedido);
+                blnRealizarConsultas=false;
+                loading_dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+                Toast.makeText(getContext(), "Failed to read value."+error.getMessage(), Toast.LENGTH_SHORT).show();
+                loading_dialog.dismiss();
+                blnRealizarConsultas=false;
+            }
+        });
+    }
+
 
     private String obtenerIdRepartidor() {
         SQLite sqLite = new SQLite(getContext());
