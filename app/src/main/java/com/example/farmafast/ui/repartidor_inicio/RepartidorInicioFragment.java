@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class RepartidorInicioFragment extends Fragment {
 
     ListView lvListaPedidos;
@@ -43,6 +46,8 @@ public class RepartidorInicioFragment extends Fragment {
 
     private androidx.appcompat.app.AlertDialog loading_dialog;
     View dialogViewPedido;
+
+    SharedPreferences preferences;
 
     private RepartidorInicioViewModel mViewModel;
 
@@ -68,14 +73,13 @@ public class RepartidorInicioFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 pedidoSelected = (Pedido) parent.getItemAtPosition(position);
-                Log.d("pedidoSelected", ""+pedidoSelected.getHora());
                 String str = "" +
                         pedidoSelected.getFecha() + "\n" +
                         pedidoSelected.getHora() + "" +
                         "";
                 dialogViewPedido = LayoutInflater.from(getContext()).inflate(R.layout.dialog_pedido, null);
                 TextView textView = dialogViewPedido.findViewById(R.id.tVInfoPedidoDialog);
-                str+="\n\n¿Deseas aceptar el pedido?";
+                str += "\n\n¿Deseas aceptar el pedido?";
                 textView.setText(str);
 
                 AlertDialog.Builder dialog_producto = new AlertDialog.Builder(getContext());
@@ -91,13 +95,15 @@ public class RepartidorInicioFragment extends Fragment {
                 dialog_producto.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //insertar en firebase el pedido
+                        //insertar actualizar el estado del pedido
+                        databaseReference.child("pedido").child(pedidoSelected.getId()).child("estado").setValue("3");
                     }
                 });
                 dialog_producto.show();
-
             }
         });
+        //shared preferences
+        preferences = this.getActivity().getSharedPreferences("pedidoActivo",MODE_PRIVATE);
         return root;
     }
 
@@ -122,14 +128,13 @@ public class RepartidorInicioFragment extends Fragment {
                 for (DataSnapshot objSnapshot : snapshot.getChildren()) {
                     Pedido p = objSnapshot.getValue(Pedido.class);
                     if (p != null) {
-                        ListaPedidos.add(p);
-                        try {
-                            arrayAdapterPedidos =
-                                    new ArrayAdapter<Pedido>(getActivity(), android.R.layout.simple_list_item_1, ListaPedidos);
-                        } catch (Exception e) {
-                            Log.e("ERROR", "Exception: " + e.getMessage());
+                        if (p.getEstado().equals("2")) {
+                            ListaPedidos.add(p);
+                            if (ListaPedidos!=null){
+                                arrayAdapterPedidos = new ArrayAdapter<Pedido>(getActivity(), android.R.layout.simple_list_item_1, ListaPedidos);
+                                lvListaPedidos.setAdapter(arrayAdapterPedidos);
+                            }
                         }
-                        lvListaPedidos.setAdapter(arrayAdapterPedidos);
                     }
                 }
             }
@@ -138,6 +143,17 @@ public class RepartidorInicioFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    private void asignarPreferenciasPedido(String id_pedido, String id_usuario, String id_establecimiento, String fecha, String hora, String estado) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("id_pedido",id_pedido);
+        editor.putString("id_usuario",id_usuario);
+        editor.putString("id_establecimiento",id_establecimiento);
+        editor.putString("fecha",fecha);
+        editor.putString("hora",hora);
+        editor.putString("estado",estado);
+        editor.commit();
     }
 
 }

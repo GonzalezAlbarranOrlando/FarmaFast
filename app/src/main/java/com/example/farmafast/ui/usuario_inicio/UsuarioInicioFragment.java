@@ -75,6 +75,8 @@ public class UsuarioInicioFragment extends Fragment {
     String str_pedidoId = "";
     String id_usuario_actual = "";
 
+    boolean blnRealizarRegistro = false;
+
     private UsuarioInicioViewModel usuarioInicioViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -205,6 +207,7 @@ public class UsuarioInicioFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //insertar en firebase el pedido
+                                blnRealizarRegistro = true;
                                 realizarRegistro();
                             }
                         });
@@ -249,11 +252,14 @@ public class UsuarioInicioFragment extends Fragment {
         databaseReference.child("pedido").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!blnRealizarRegistro){
+                    return;
+                }
                 for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
                     pedidoTemporal = objSnapshot.getValue(Pedido.class);
                     if (pedidoTemporal != null) {
                         if (pedidoTemporal.getId() != null) {
-                            Log.w("qqqqqqqqqqqqqq", "" + pedidoTemporal.getId());
+                            Log.w("pedido", "" + pedidoTemporal.getId());
                             if (pedidoTemporal.getId_usuario().equals(id_usuario_actual) && pedidoTemporal.getEstado().equals("1")) {
                                 str_pedidoId = pedidoTemporal.getId();
                                 break;
@@ -261,24 +267,28 @@ public class UsuarioInicioFragment extends Fragment {
                         }
                     }
                 }
-                if (str_pedidoId.equals("")) {
-                    str_pedidoId = UUID.randomUUID().toString();
-                    Pedido pe = new Pedido();
-                    pe.setId(str_pedidoId);
-                    pe.setId_usuario(id_usuario_actual);
-                    pe.setId_establecimiento(productoSelected.getId_establecimiento());
-                    pe.setEstado("1");
-                    pe.setFecha(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-                    pe.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                    databaseReference.child("pedido").child(pe.getId()).setValue(pe);
-                    pedidoTemporal = pe;
+                if (blnRealizarRegistro){
+                    if (str_pedidoId.equals("")) {
+                        str_pedidoId = UUID.randomUUID().toString();
+                        Pedido pe = new Pedido();
+                        pe.setId(str_pedidoId);
+                        pe.setId_usuario(id_usuario_actual);
+                        pe.setId_establecimiento(productoSelected.getId_establecimiento());
+                        pe.setEstado("1");
+                        pe.setFecha(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+                        pe.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        pe.setId_repartidor("");
+                        databaseReference.child("pedido").child(pe.getId()).setValue(pe);
+                        pedidoTemporal = pe;
+                    }
+                    PedidoProducto pp = new PedidoProducto();
+                    pp.setId(UUID.randomUUID().toString());
+                    pp.setId_pedido(str_pedidoId);
+                    pp.setId_producto(productoSelected.getId());
+                    pp.setCantidad_producto(cantidad + "");
+                    databaseReference.child("pedido_producto").child(pp.getId()).setValue(pp);
+                    blnRealizarRegistro = false;
                 }
-                PedidoProducto pp = new PedidoProducto();
-                pp.setId(UUID.randomUUID().toString());
-                pp.setId_pedido(str_pedidoId);
-                pp.setId_producto(productoSelected.getId());
-                pp.setCantidad_producto(cantidad + "");
-                databaseReference.child("pedido_producto").child(pp.getId()).setValue(pp);
             }
 
             @Override

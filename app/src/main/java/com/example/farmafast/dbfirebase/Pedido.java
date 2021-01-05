@@ -4,6 +4,7 @@ public class Pedido {
     private String Id;
     private String Id_usuario;
     private String Id_establecimiento;
+    private String Id_repartidor;
     private String Fecha;
     private String Hora;
     private String Estado;
@@ -64,6 +65,14 @@ public class Pedido {
 
     public void setEstado(String estado) {
         Estado = estado;
+    }
+
+    public String getId_repartidor() {
+        return Id_repartidor;
+    }
+
+    public void setId_repartidor(String id_repartidor) {
+        Id_repartidor = id_repartidor;
     }
 
     public String toString() {

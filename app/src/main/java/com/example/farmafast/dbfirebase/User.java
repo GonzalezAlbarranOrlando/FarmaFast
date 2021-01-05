@@ -5,6 +5,13 @@ public class User {
     private String Uid;
     private String Tipo_usuario;
 
+    /*
+    Tipo 0: Sesion vacia
+    Tipo 1: Usuario
+    Tipo 2: Repartidor
+    Tipo 3: Establecimiento
+    */
+
     public User() {
     }
 
