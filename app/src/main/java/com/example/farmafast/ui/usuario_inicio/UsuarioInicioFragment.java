@@ -74,7 +74,6 @@ public class UsuarioInicioFragment extends Fragment {
 
     String str_pedidoId = "";
     String id_usuario_actual = "";
-    boolean realizaronDataChange = false;
 
     private UsuarioInicioViewModel usuarioInicioViewModel;
 
@@ -112,71 +111,72 @@ public class UsuarioInicioFragment extends Fragment {
                 dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_producto, null);
                 TextView textView = dialogView.findViewById(R.id.tVInfoProductoDialog);
                 imageView = dialogView.findViewById(R.id.iVFotoDialog);
-
+                //
                 ibMas = dialogView.findViewById(R.id.ibMas_cantidad_Dialog);
                 ibMenos = dialogView.findViewById(R.id.ibMenos_cantidad_Dialog);
                 etCantidad = dialogView.findViewById(R.id.tietCantidad_producto_Dialog);
                 etCantidad.setEnabled(false);
                 cantidad = 1;
-                etCantidad.setText(""+cantidad);
+                etCantidad.setText("" + cantidad);
                 ibMas.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         cantidad++;
-                        etCantidad.setText(""+cantidad);
+                        etCantidad.setText("" + cantidad);
                     }
                 });
-
                 ibMenos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (cantidad==1){
+                        if (cantidad == 1) {
                             return;
                         }
                         cantidad--;
-                        etCantidad.setText(""+cantidad);
+                        etCantidad.setText("" + cantidad);
                     }
                 });
                 textView.setText(str);
                 cargarImagenes(productoSelected.getImagen());
             }
         });
+        id_usuario_actual = obtenerIdUsuario();
         return root;
     }
 
-    private void iniciarFirebase(){
+    private void iniciarFirebase() {
         FirebaseApp.initializeApp(getContext());
         firebaseDataBase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDataBase.getReference();
         mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
-    public void listarDatos(){
+    public void listarDatos() {
         databaseReference.child("producto").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ListaProductos.clear();
-                for (DataSnapshot objSnapshot: snapshot.getChildren()){
+                for (DataSnapshot objSnapshot : snapshot.getChildren()) {
                     Producto p = objSnapshot.getValue(Producto.class);
-                    if(p!=null){
+                    if (p != null) {
                         ListaProductos.add(p);
                         try {
                             arrayAdapterProductos =
                                     new ArrayAdapter<Producto>(getActivity(), android.R.layout.simple_list_item_1, ListaProductos);
-                        }catch (Exception e){
-                            Log.e("ERROR","Exception: "+e.getMessage());
+                        } catch (Exception e) {
+                            Log.e("ERROR", "Exception: " + e.getMessage());
                         }
                         lvListaProductos.setAdapter(arrayAdapterProductos);
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }
 
-    public void cargarImagenes(String imagen){
+    public void cargarImagenes(String imagen) {
         loading_dialog.setMessage("Obteniendo datos...");
         loading_dialog.show();
         localFile = null;
@@ -198,35 +198,14 @@ public class UsuarioInicioFragment extends Fragment {
                         dialog_producto.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                               //nada
+                                //nada
                             }
                         });
                         dialog_producto.setPositiveButton("Carrito", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //insertar en firebase el pedido
-                                id_usuario_actual = obtenerIdUsuario();
-                                realizaronDataChange = true;
-                                obtenerPedidoId();
-                                realizaronDataChange = false;
-                                if (str_pedidoId==""){
-                                    str_pedidoId = UUID.randomUUID().toString();
-                                    Pedido pe = new Pedido();
-                                    pe.setId(str_pedidoId);
-                                    pe.setId_usuario(id_usuario_actual);
-                                    pe.setId_establecimiento(productoSelected.getId_establecimiento());
-                                    pe.setEstado("1");
-                                    pe.setFecha(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-                                    pe.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-                                    databaseReference.child("pedido").child(pe.getId()).setValue(pe);
-                                    pedidoTemporal = pe;
-                                }
-                                PedidoProducto pp = new PedidoProducto();
-                                pp.setId(UUID.randomUUID().toString());
-                                pp.setId_pedido(str_pedidoId);
-                                pp.setId_producto(productoSelected.getId());
-                                pp.setCantidad_producto(cantidad+"");
-                                databaseReference.child("pedido_producto").child(pp.getId()).setValue(pp);
+                                realizarRegistro();
                             }
                         });
                         dialog_producto.show();
@@ -242,15 +221,15 @@ public class UsuarioInicioFragment extends Fragment {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                 dialog.setTitle("Producto");
                 dialog.setView(dialogView);
-                dialog.setPositiveButton("Aceptar",null);
+                dialog.setPositiveButton("Aceptar", null);
                 dialog.show();
-                Toast.makeText(getContext(),"Error al cargarla imagen",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error al cargarla imagen", Toast.LENGTH_SHORT).show();
                 UsuarioInicioFragment.this.loading_dialog.dismiss();
             }
         });
     }
 
-    private String obtenerIdUsuario(){
+    private String obtenerIdUsuario() {
         SQLite sqLite = new SQLite(getContext());
         sqLite.abrir();
         Cursor cursor = sqLite.getValor(1);
@@ -265,21 +244,43 @@ public class UsuarioInicioFragment extends Fragment {
     }
 
     Pedido pedidoTemporal;
-    private void obtenerPedidoId(){
+    private void realizarRegistro() {
+        str_pedidoId = "";
         databaseReference.child("pedido").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                pedidoTemporal = dataSnapshot.getValue(Pedido.class);
-                if (pedidoTemporal != null && realizaronDataChange){
-                    if (pedidoTemporal.getId() != null){
-                        if (pedidoTemporal.getId_usuario().equals(id_usuario_actual)&& pedidoTemporal.getEstado().equals("1")) {
-                            str_pedidoId = pedidoTemporal.getId();
-                            realizaronDataChange = false;
-                            return;
+                for (DataSnapshot objSnapshot : dataSnapshot.getChildren()) {
+                    pedidoTemporal = objSnapshot.getValue(Pedido.class);
+                    if (pedidoTemporal != null) {
+                        if (pedidoTemporal.getId() != null) {
+                            Log.w("qqqqqqqqqqqqqq", "" + pedidoTemporal.getId());
+                            if (pedidoTemporal.getId_usuario().equals(id_usuario_actual) && pedidoTemporal.getEstado().equals("1")) {
+                                str_pedidoId = pedidoTemporal.getId();
+                                break;
+                            }
                         }
                     }
                 }
+                if (str_pedidoId.equals("")) {
+                    str_pedidoId = UUID.randomUUID().toString();
+                    Pedido pe = new Pedido();
+                    pe.setId(str_pedidoId);
+                    pe.setId_usuario(id_usuario_actual);
+                    pe.setId_establecimiento(productoSelected.getId_establecimiento());
+                    pe.setEstado("1");
+                    pe.setFecha(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+                    pe.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                    databaseReference.child("pedido").child(pe.getId()).setValue(pe);
+                    pedidoTemporal = pe;
+                }
+                PedidoProducto pp = new PedidoProducto();
+                pp.setId(UUID.randomUUID().toString());
+                pp.setId_pedido(str_pedidoId);
+                pp.setId_producto(productoSelected.getId());
+                pp.setCantidad_producto(cantidad + "");
+                databaseReference.child("pedido_producto").child(pp.getId()).setValue(pp);
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
