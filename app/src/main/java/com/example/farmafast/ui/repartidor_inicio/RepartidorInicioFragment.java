@@ -34,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -53,6 +54,8 @@ public class RepartidorInicioFragment extends Fragment {
     SharedPreferences preferences;
 
     String id_repartidor_actual = "";
+
+    boolean blnRepartidorTienePedidoActivo = false;
 
     private RepartidorInicioViewModel mViewModel;
 
@@ -101,8 +104,7 @@ public class RepartidorInicioFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //validar si hay un pedido en proceso
-                        String idAux = preferences.getString("id_pedido", null);
-                        if (idAux!=null){
+                        if (blnRepartidorTienePedidoActivo){
                             Toast.makeText(getContext(), "No puedes aceptar más de un pedido a la vez", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -154,10 +156,13 @@ public class RepartidorInicioFragment extends Fragment {
                         if (p.getEstado().equals("2")) {
                             ListaPedidos.add(p);
                             if (ListaPedidos!=null){
-                                arrayAdapterPedidos = new ArrayAdapter<Pedido>(getActivity(), android.R.layout.simple_list_item_1, ListaPedidos);
+                                arrayAdapterPedidos = new ArrayAdapter<Pedido>(requireContext(), android.R.layout.simple_list_item_1, ListaPedidos);
                                 lvListaPedidos.setAdapter(arrayAdapterPedidos);
                             }
+                        }else if (p.getEstado().equals("3")||p.getEstado().equals("")) {
+                            blnRepartidorTienePedidoActivo = true;
                         }
+
                     }
                 }
             }

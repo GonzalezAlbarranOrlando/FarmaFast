@@ -12,7 +12,9 @@ public class Pedido {
     Estado 1: Pedido Carrito
     Estado 2: Pedido Realizado
     Estado 3: Pedido Aceptado por Repartidor
-    Estado 4: Pedido Entregado
+    Estado 4: Repartidor en camino al Establecimiento
+    Estado 5: Repartidor en camino al Domicilio
+    Estado 6: Pedido Entregado
      */
 
     public Pedido() {

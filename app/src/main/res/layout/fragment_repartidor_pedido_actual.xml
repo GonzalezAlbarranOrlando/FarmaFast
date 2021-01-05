@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.repartidor_pedido_actual.RepartidorPedidoActualFragment">
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
-
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+        <TextView
+            android:id="@+id/tvInfoPedidoActual_repartidor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:text="@string/nada"/>
+        <Button
+            android:id="@+id/bIraEstablecimiento_repartidor"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/ir_establecimiento"/>
+        <Button
+            android:id="@+id/bIraDomicilio_repartidor"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/ir_domicilio"/>
+    </LinearLayout>
+</ScrollView>

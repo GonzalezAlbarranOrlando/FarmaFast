@@ -273,6 +273,7 @@ public class UsuarioInicioFragment extends Fragment {
                         Pedido pe = new Pedido();
                         pe.setId(str_pedidoId);
                         pe.setId_usuario(id_usuario_actual);
+                        Log.w("id_estableciientooooooo: ", productoSelected.getId_establecimiento());
                         pe.setId_establecimiento(productoSelected.getId_establecimiento());
                         pe.setEstado("1");
                         pe.setFecha(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
