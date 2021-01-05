@@ -2,6 +2,7 @@ package com.example.farmafast.ui.usuario_inicio;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +25,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.farmafast.R;
+import com.example.farmafast.dbfirebase.Pedido;
+import com.example.farmafast.dbfirebase.PedidoProducto;
 import com.example.farmafast.dbfirebase.Producto;
+import com.example.farmafast.dbsql.SQLite;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
@@ -39,8 +43,13 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
+import static android.content.ContentValues.TAG;
 
 public class UsuarioInicioFragment extends Fragment {
 
@@ -62,6 +71,10 @@ public class UsuarioInicioFragment extends Fragment {
     File localFile;
     private androidx.appcompat.app.AlertDialog loading_dialog;
     View dialogView;
+
+    String str_pedidoId = "";
+    String id_usuario_actual = "";
+    boolean realizaronDataChange = false;
 
     private UsuarioInicioViewModel usuarioInicioViewModel;
 
@@ -192,7 +205,28 @@ public class UsuarioInicioFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //insertar en firebase el pedido
-
+                                id_usuario_actual = obtenerIdUsuario();
+                                realizaronDataChange = true;
+                                obtenerPedidoId();
+                                realizaronDataChange = false;
+                                if (str_pedidoId==""){
+                                    str_pedidoId = UUID.randomUUID().toString();
+                                    Pedido pe = new Pedido();
+                                    pe.setId(str_pedidoId);
+                                    pe.setId_usuario(id_usuario_actual);
+                                    pe.setId_establecimiento(productoSelected.getId_establecimiento());
+                                    pe.setEstado("1");
+                                    pe.setFecha(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+                                    pe.setHora(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                                    databaseReference.child("pedido").child(pe.getId()).setValue(pe);
+                                    pedidoTemporal = pe;
+                                }
+                                PedidoProducto pp = new PedidoProducto();
+                                pp.setId(UUID.randomUUID().toString());
+                                pp.setId_pedido(str_pedidoId);
+                                pp.setId_producto(productoSelected.getId());
+                                pp.setCantidad_producto(cantidad+"");
+                                databaseReference.child("pedido_producto").child(pp.getId()).setValue(pp);
                             }
                         });
                         dialog_producto.show();
@@ -210,10 +244,47 @@ public class UsuarioInicioFragment extends Fragment {
                 dialog.setView(dialogView);
                 dialog.setPositiveButton("Aceptar",null);
                 dialog.show();
-                Toast.makeText(getContext(),"Error al cargarla imagen",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Error al cargarla imagen",Toast.LENGTH_SHORT).show();
                 UsuarioInicioFragment.this.loading_dialog.dismiss();
             }
         });
     }
 
+    private String obtenerIdUsuario(){
+        SQLite sqLite = new SQLite(getContext());
+        sqLite.abrir();
+        Cursor cursor = sqLite.getValor(1);
+        if (cursor.getCount() == 0) {
+            //No se encotró el registro en la base de datos SQL
+            return "";
+        }
+        cursor.moveToFirst();
+        String string_column1 = cursor.getString(1);
+        sqLite.cerrar();
+        return string_column1;
+    }
+
+    Pedido pedidoTemporal;
+    private void obtenerPedidoId(){
+        databaseReference.child("pedido").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                pedidoTemporal = dataSnapshot.getValue(Pedido.class);
+                if (pedidoTemporal != null && realizaronDataChange){
+                    if (pedidoTemporal.getId() != null){
+                        if (pedidoTemporal.getId_usuario().equals(id_usuario_actual)&& pedidoTemporal.getEstado().equals("1")) {
+                            str_pedidoId = pedidoTemporal.getId();
+                            realizaronDataChange = false;
+                            return;
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
 }
