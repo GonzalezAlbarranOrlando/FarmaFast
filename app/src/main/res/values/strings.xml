@@ -62,6 +62,7 @@
     <string name="datos">Datos</string>
     <string name="precio">Precio</string>
     <string name="lista_de_productos">Lista de productos</string>
+    <string name="pedidos_disponibles">Pedidos disponibles</string>
     <string name="limpiar">Limpiar</string>
     <string name="nada"></string>
     <string name="cantidad">Cantidad</string>

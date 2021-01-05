@@ -67,6 +67,6 @@ public class Pedido {
     }
 
     public String toString() {
-        return Id_usuario;
+        return Hora+" - "+Fecha;
     }
 }

@@ -70,7 +70,7 @@ public class UsuarioInicioFragment extends Fragment {
     ImageView imageView;
     File localFile;
     private androidx.appcompat.app.AlertDialog loading_dialog;
-    View dialogView;
+    View dialogViewProducto;
 
     String str_pedidoId = "";
     String id_usuario_actual = "";
@@ -92,7 +92,7 @@ public class UsuarioInicioFragment extends Fragment {
         //
         iniciarFirebase();
         listarDatos();
-        //Inicializar AlertDialog
+        //Inicializar dialog_loading
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
         builder.setCancelable(false); // if you want user to wait for some process to finish,
         builder.setView(R.layout.dialog_loading);
@@ -108,13 +108,13 @@ public class UsuarioInicioFragment extends Fragment {
                         productoSelected.getNombre() + "\n" +
                         "Precio: " + productoSelected.getPrecio() + " $MXN" +
                         "";
-                dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_producto, null);
-                TextView textView = dialogView.findViewById(R.id.tVInfoProductoDialog);
-                imageView = dialogView.findViewById(R.id.iVFotoDialog);
+                dialogViewProducto = LayoutInflater.from(getContext()).inflate(R.layout.dialog_producto, null);
+                TextView textView = dialogViewProducto.findViewById(R.id.tVInfoProductoDialog);
+                imageView = dialogViewProducto.findViewById(R.id.iVFotoDialog);
                 //
-                ibMas = dialogView.findViewById(R.id.ibMas_cantidad_Dialog);
-                ibMenos = dialogView.findViewById(R.id.ibMenos_cantidad_Dialog);
-                etCantidad = dialogView.findViewById(R.id.tietCantidad_producto_Dialog);
+                ibMas = dialogViewProducto.findViewById(R.id.ibMas_cantidad_Dialog);
+                ibMenos = dialogViewProducto.findViewById(R.id.ibMenos_cantidad_Dialog);
+                etCantidad = dialogViewProducto.findViewById(R.id.tietCantidad_producto_Dialog);
                 etCantidad.setEnabled(false);
                 cantidad = 1;
                 etCantidad.setText("" + cantidad);
@@ -193,7 +193,7 @@ public class UsuarioInicioFragment extends Fragment {
                         // ...
                         AlertDialog.Builder dialog_producto = new AlertDialog.Builder(getContext());
                         dialog_producto.setTitle("Producto");
-                        dialog_producto.setView(dialogView);
+                        dialog_producto.setView(dialogViewProducto);
                         dialog_producto.setCancelable(false);
                         dialog_producto.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
@@ -220,7 +220,7 @@ public class UsuarioInicioFragment extends Fragment {
                 // ...
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                 dialog.setTitle("Producto");
-                dialog.setView(dialogView);
+                dialog.setView(dialogViewProducto);
                 dialog.setPositiveButton("Aceptar", null);
                 dialog.show();
                 Toast.makeText(getContext(), "Error al cargarla imagen", Toast.LENGTH_SHORT).show();
