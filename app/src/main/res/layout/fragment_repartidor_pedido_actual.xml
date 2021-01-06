@@ -28,5 +28,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/ir_domicilio"/>
+        <Button
+            android:id="@+id/bEntregaRealizada_repartidor"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/entrega_realizada"
+            android:layout_marginBottom="20dp"/>
     </LinearLayout>
 </ScrollView>

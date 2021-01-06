@@ -2,8 +2,13 @@ package com.example.farmafast.ui.repartidor_pedido_actual;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +24,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.farmafast.EstablecimientoActivity;
 import com.example.farmafast.R;
+import com.example.farmafast.RepartidorActivity;
 import com.example.farmafast.dbfirebase.Establecimiento;
 import com.example.farmafast.dbfirebase.Pedido;
 import com.example.farmafast.dbfirebase.PedidoProducto;
@@ -33,7 +40,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Locale;
 import java.util.Stack;
 
 import static android.content.ContentValues.TAG;
@@ -44,6 +54,7 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
     TextView tvInfoPedidoActual;
     Button bIrDomicilio;
     Button bIrEstablecimiento;
+    Button bEntregaRealizada;
 
     private androidx.appcompat.app.AlertDialog loading_dialog;
 
@@ -96,9 +107,11 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
         tvInfoPedidoActual = root.findViewById(R.id.tvInfoPedidoActual_repartidor);
         bIrDomicilio = root.findViewById(R.id.bIraDomicilio_repartidor);
         bIrEstablecimiento = root.findViewById(R.id.bIraEstablecimiento_repartidor);
+        bEntregaRealizada = root.findViewById(R.id.bEntregaRealizada_repartidor);
         //
         bIrDomicilio.setOnClickListener(this);
         bIrEstablecimiento.setOnClickListener(this);
+        bEntregaRealizada.setOnClickListener(this);
         //Inicializar AlertDialog
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
         builder.setCancelable(false); // if you want user to wait for some process to finish,
@@ -112,11 +125,25 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bIraEstablecimiento_repartidor: {
-                Toast.makeText(getContext(), "bIraEstablecimiento_repartidor", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "bIraEstablecimiento_repartidor", Toast.LENGTH_SHORT).show();
+                //databaseReference.child("pedido").child(str_id_pedido).child("estado").setValue("3");
+                //blnRealizarConsultas=true;
+                irDestino(longitudEstablecimiento,latitudEstablecimiento);
                 break;
             }
             case R.id.bIraDomicilio_repartidor: {
-                Toast.makeText(getContext(), "bIraDomicilio_repartidor", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "bIraDomicilio_repartidor", Toast.LENGTH_SHORT).show();
+                databaseReference.child("pedido").child(str_id_pedido).child("estado").setValue("4");
+                irDestino(longitudCliente,latitudCliente);
+                break;
+            }
+            case R.id.bEntregaRealizada_repartidor: {
+                //Toast.makeText(getContext(), "bEntregaRealizada_repartidor", Toast.LENGTH_SHORT).show();
+                tvInfoPedidoActual.setText("No hay pedido aceptado actualmente");
+                bIrDomicilio.setEnabled(false);
+                bIrEstablecimiento.setEnabled(false);
+                bEntregaRealizada.setEnabled(false);
+                databaseReference.child("pedido").child(str_id_pedido).child("estado").setValue("5");
                 break;
             }
         }
@@ -162,6 +189,7 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
                     tvInfoPedidoActual.setText("No hay pedido aceptado actualmente");
                     bIrDomicilio.setEnabled(false);
                     bIrEstablecimiento.setEnabled(false);
+                    bEntregaRealizada.setEnabled(false);
                     return;
                 }
                 realizarConsultaProductosPedido();
@@ -320,9 +348,10 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
                 //
 
                 if (str_estado_pedido.equals("3")) {
-                    bIrDomicilio.setEnabled(false);
+                    //bIrDomicilio.setEnabled(false);
+                    //bEntregaRealizada.setEnabled(false);
                 } else if (str_estado_pedido.equals("4")) {
-                    bIrEstablecimiento.setEnabled(false);
+                    //bIrEstablecimiento.setEnabled(false);
                 }
                 tvInfoPedidoActual.setText(str_info_completa_pedido);
                 blnRealizarConsultas = false;
@@ -338,6 +367,35 @@ public class RepartidorPedidoActualFragment extends Fragment implements View.OnC
                 blnRealizarConsultas = false;
             }
         });
+    }
+
+
+
+
+    public void irDestino(String longitud, String latitud) {
+        String direc="";
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            List<Address> direccion = geocoder.getFromLocation(Double.parseDouble(latitud), Double.parseDouble(longitud),1);
+            direc = direccion.get(0).getAddressLine(0);
+            //txtUbicacion.setText(direc);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            // Launch Waze to look for location
+            String url = "https://waze.com/ul?q="+direc+"";
+            Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
+            startActivity( intent );
+        }
+        catch ( ActivityNotFoundException ex  )
+        {
+            // If Waze is not installed, open it in Google Play:
+            Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
+            startActivity(intent);
+        }
     }
 
 

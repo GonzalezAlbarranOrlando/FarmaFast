@@ -58,6 +58,7 @@ public class RepartidorInicioFragment extends Fragment {
     boolean blnRepartidorTienePedidoActivo = false;
 
     private RepartidorInicioViewModel mViewModel;
+    View root;
 
     public static RepartidorInicioFragment newInstance() {
         return new RepartidorInicioFragment();
@@ -66,7 +67,7 @@ public class RepartidorInicioFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_repartidor_inicio, container, false);
+        root = inflater.inflate(R.layout.fragment_repartidor_inicio, container, false);
         //
         iniciarFirebase();
         listarDatos();
@@ -156,10 +157,10 @@ public class RepartidorInicioFragment extends Fragment {
                         if (p.getEstado().equals("2")) {
                             ListaPedidos.add(p);
                             if (ListaPedidos!=null){
-                                arrayAdapterPedidos = new ArrayAdapter<Pedido>(requireContext(), android.R.layout.simple_list_item_1, ListaPedidos);
+                                arrayAdapterPedidos = new ArrayAdapter<Pedido>(root.getContext(), android.R.layout.simple_list_item_1, ListaPedidos);
                                 lvListaPedidos.setAdapter(arrayAdapterPedidos);
                             }
-                        }else if (p.getEstado().equals("3")||p.getEstado().equals("")) {
+                        }else if (p.getEstado().equals("3")||p.getEstado().equals("4")) {
                             blnRepartidorTienePedidoActivo = true;
                         }
 
