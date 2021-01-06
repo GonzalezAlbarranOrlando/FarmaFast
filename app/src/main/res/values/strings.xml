@@ -69,7 +69,7 @@
     <string name="cantidad">Cantidad</string>
     <string name="comprar_ahora">Comprar ahora</string>
 
-    <string name="ir_domicilio">Ir a Domicilio</string>
+    <string name="ir_domicilio">Ir a Entregar</string>
     <string name="ir_establecimiento">Ir a Establecimiento</string>
 
 </resources>
