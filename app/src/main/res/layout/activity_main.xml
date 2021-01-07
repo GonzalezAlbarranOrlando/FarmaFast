@@ -66,14 +66,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/registrarse_como_establecimiento" />
-        <TextView
-            android:id="@+id/tvRestablecerContraseniaMain"
-            android:layout_width="match_parent"
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="@string/restablecer_contrasenia"/>
+            android:layout_gravity="center"
+            android:layout_margin="20sp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/olvidaste_tu_contrasenia"
+                android:layout_marginRight="5dp"/>
+            <TextView
+                android:id="@+id/tvRestablecerContraseniaMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="@string/restablecer_contrasenia"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 

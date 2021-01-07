@@ -5,8 +5,9 @@
     <string name="contrasenia">Contraseña</string>
     <string name="ingresar">Ingresar</string>
     <string name="no_tienes_cuenta">¿No tienes cuenta?</string>
+    <string name="olvidaste_tu_contrasenia">¿Olvdaste tu contraseña?</string>
     <string name="registrate">Registrate</string>
-    <string name="restablecer_contrasenia">Restablecer contraseña</string>
+    <string name="restablecer_contrasenia">Restablecer</string>
 
     <string name="registro_de_usuario">Registro de usuario</string>
     <string name="registro_de_repartidor">Registro de repartidor</string>
@@ -65,7 +66,7 @@
     <string name="lista_de_productos">Lista de productos</string>
     <string name="pedidos_disponibles">Pedidos disponibles</string>
     <string name="limpiar">Limpiar</string>
-    <string name="nada"></string>
+    <string name="nada"> </string>
     <string name="cantidad">Cantidad</string>
     <string name="comprar_ahora">Comprar ahora</string>
 
